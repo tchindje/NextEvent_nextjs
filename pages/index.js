@@ -1,16 +1,23 @@
-import { use, useCallback, useEffect, useState } from "react";
 import EventsList from "../components/event/EventsList";
-import EventsSearch from "../components/event/event-search";
-import { getFeaturedEvent, getFiltredEvent } from "../dummy-data";
+import { getFeaturedEvents } from "../helpers/api-utils";
 
-const HomePage = () => {
-  const featuredEvents = getFeaturedEvent();
-
+const HomePage = (props) => {
   return (
     <>
-      <EventsList events={featuredEvents} />
+      <EventsList events={props.featuredEvents} />
     </>
   );
 };
+
+export async function getStaticProps() {
+  const featuredEvents = await getFeaturedEvents();
+
+  return {
+    props: {
+      featuredEvents,
+    },
+    revalidate: 3000,
+  };
+}
 
 export default HomePage;

@@ -4,7 +4,7 @@ import classes from "./event-search.module.css";
 
 const EventsSearch = (props) => {
   const [selectedYear, setSelectedYear] = useState(2021);
-  const [selectedMonth, setSelectedMonth] = useState(2);
+  const [selectedMonth, setSelectedMonth] = useState(1);
 
   const handlerSubmit = (event) => {
     event.preventDefault();
@@ -48,8 +48,9 @@ const EventsSearch = (props) => {
             <option value="12">december</option>
           </select>
         </div>
+
+        <Button>Search</Button>
       </div>
-      <Button>Search</Button>
     </form>
   );
 };

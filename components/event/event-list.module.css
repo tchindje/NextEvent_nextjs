@@ -3,3 +3,13 @@
   max-width: 40rem;
   margin: 5rem auto;
 }
+
+@media (min-width: 768px) {
+  .list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    min-width: 900px;
+  }
+}
