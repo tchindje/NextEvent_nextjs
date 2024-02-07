@@ -1,26 +1,23 @@
+import Head from "next/head";
 import EventSummary from "../../components/event-detail/event-summary";
 import EventLogistics from "../../components/event-detail/event-logistics";
 import EventContent from "../../components/event-detail/event-content";
-import Button from "../../components/ui/button";
-import ErrorAlert from "../../components/ui/error-alert";
-import { getAllEventsIDs, getEventById } from "../../helpers/api-utils";
+import { getEventById, getFeaturedEvents } from "../../helpers/api-utils";
+import Comments from "../../components/input/comments";
 
 const EventDetailPage = (props) => {
   let { event } = props;
 
   if (!event) {
-    return (
-      <div className="center">
-        <ErrorAlert>
-          <div>No events found for a chosen ID !</div>
-        </ErrorAlert>
-        <Button link="/">Show all Events</Button>
-      </div>
-    );
+    return <div className="center">Loading...</div>;
   }
 
   return (
     <>
+      <Head>
+        <title>{event.title}</title>
+        <meta name={event.title} content={event.description} />
+      </Head>
       <EventSummary title={event.title} />
       <EventLogistics
         date={event.date}
@@ -31,22 +28,23 @@ const EventDetailPage = (props) => {
       <EventContent>
         <p>{event.description}</p>
       </EventContent>
+      <Comments eventId={event.id} />
     </>
   );
 };
 
 export async function getStaticPaths() {
-  const eventsIds = await getAllEventsIDs();
+  const featuredEvents = await getFeaturedEvents();
 
-  const paths = eventsIds.map((id) => ({
+  const paths = featuredEvents.map((event) => ({
     params: {
-      eventId: id,
+      eventId: event.id,
     },
   }));
 
   return {
     paths: paths,
-    fallback: false,
+    fallback: true,
   };
 }
 
@@ -56,13 +54,18 @@ export async function getStaticProps(context) {
   const event = await getEventById(eventId);
 
   if (!event) {
-    return { notFound: true };
+    return {
+      props: {
+        event: null,
+      },
+    };
   }
 
   return {
     props: {
       event,
     },
+    revalidate: 30,
   };
 }
 

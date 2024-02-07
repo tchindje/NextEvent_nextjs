@@ -1,3 +1,4 @@
+import Head from "next/head";
 import React from "react";
 import { useRouter } from "next/router";
 
@@ -16,6 +17,13 @@ const AllEventsPage = (props) => {
 
   return (
     <div>
+      <Head>
+        <title>Next Events </title>
+        <meta
+          name="description"
+          content="find a lof of great events to evolve"
+        />
+      </Head>
       <EventsSearch onSearch={searchEventsHandler} />
       <EventsList events={allEvents} />;
     </div>
